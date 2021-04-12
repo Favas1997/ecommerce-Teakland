@@ -59,8 +59,6 @@ def home(request):
           for j in order_today:
                revenue_today=revenue_today+j.price
           Revenue_today=revenue_today
-          print(today_date)
-          print('111111111111111111111111111111')
           return render(request,'Admin/dashboard.html',{'order_count':order_count,'user_count':users_count,'revenue':revenues,'revenue_month':revenues_month,
           'revenue_year':Revenue_year,'revenue_today':Revenue_today,'order':order})
      else:
@@ -120,7 +118,6 @@ def category_delete(request,id):
 def addproducts(request):
           if request.session.has_key('key'):
                if request.method=='POST':
-                    print('1112233333')
                     product_name=request.POST['product_name']
                     print(product_name)
                     price=request.POST['price']
@@ -151,8 +148,6 @@ def addproducts(request):
                          return JsonResponse('true', safe=False)
                else:
                     category=product_category.objects.all()
-                    print('11111111111111111111111111111111111')
-                    print('2222222222222222222222222222222222')
                     return render(request,'Admin/addproducts.html',{'category': category})
           else:
                     return redirect(login)
@@ -225,7 +220,6 @@ def order_list(request):
 @csrf_exempt
 def order_status(request):
      if request.method =='POST':
-          print('111111111111111111')
           status1=request.POST['status']
           id=request.POST['id1']
           orders=Order.objects.get(id=id)
@@ -246,8 +240,6 @@ def report_search(request):
          return render(request,'Admin/report.html',{'order':order}) 
 def addoffer(request,id):
      discount=request.POST['disc']
-     print(id)
-     print(discount)
      cat=product_category.objects.get(id=id)
      cat.discount=discount
      cat.save()

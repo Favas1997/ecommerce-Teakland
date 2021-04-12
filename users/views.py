@@ -107,8 +107,6 @@ def add_to_cart(request,id):
             cart= Cart.objects.create(user=user,products=details)
             cart.save()
             cart_details=Cart.objects.all()
-     
-          #return render(request,"User/cart.html",{'cart':cart_details})
           return redirect(index)
 
      else:
@@ -166,33 +164,8 @@ def checkout(request):
      if request.user.is_authenticated:
           user=request.user
           address=Address.objects.filter(user=user)
-          # carts=Cart.objects.filter(user=user)
-          # sub_total=0
-          # grand_total=40
-          # total=0
-
-          # for cart in carts:
-          #      quantity = cart.count
-          #      if cart.products.category.discount !=0:
-          #           price=cart.products.discountprice
-          #           print(price)
-          #           print(cart.products.category.discount)
-          #           prin
-                    
-          #      else:
-          #           price=cart.products.price
-          #      total_price=quantity*price
-          #      print(total_price)
-          #      carts.total=total_price
-          #      sub_total += total_price
-          #      grand_total = grand_total + sub_total
-          #      print('111111111111111111111111')
-          #      print(quantity)
-
-          #      print(grand_total)
           if request.method=='POST':
                coupon_typed=request.POST['coupon']
-               print(coupon_typed)
                grand_total=request.session['total']
 
                if coupon.objects.filter(coupon_code=coupon_typed):
@@ -202,8 +175,6 @@ def checkout(request):
                     coup.active = False
                     coup.save()
                elif Referal.objects.filter(referal_code=coupon_typed):
-                    # ref= Referal.objects.get(referal_code=coupon_typed)
-                    # ref.delete()
                     request.session['refercode']=coupon_typed
                     grand_total1=(grand_total-((grand_total/100)*10))
                else:
@@ -303,11 +274,9 @@ def paypal(request):
                     coup=coupon.objects.get(coupon_code=coup)
                     grand_total=(grand_total-((grand_total/100)*coup.coupon_percentage))
                     grand_total=int(grand_total/72)
-                    # del request.session['refercode']
                elif Referal.objects.filter(referal_code=coup):
                     grand_total=(grand_total-((grand_total/100)*10))
                     grand_total=int(grand_total/72)
-                    # del request.session['refercode']
           else:
                grand_total=int(grand_total/72)
           context={'grand_total':grand_total}
