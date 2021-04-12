@@ -1,0 +1,158 @@
+{% extends "Admin/blank.html" %}
+{% load static %}
+{% block link %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+{% endblock link %}
+<div class="page-wrapper">
+    {% block content %}
+    <link href="{% static 'Admin/user.css'%}" rel="stylesheet">
+    	
+
+
+    
+    
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb bg-white">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">Sales Report</h4>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+
+    <div class="container-fluid ">
+        <!-- ============================================================== -->
+        <!-- Three charts -->
+        <!-- ============================================================== -->
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="white-box">
+                <div class="d-md-flex mb-3">
+                    <div>
+                        <br>
+                    
+                </div>
+                    <div class="col-md-3 col-sm-4 col-xs-6 ms-auto">
+                        <form action="/admin/report_search/" method="POST">
+                            {%csrf_token%}
+                            <label for="exampleFormControlFile1">From</label>
+                            <input type="date" class="form-control"  id="fromdate" name="datefrom" onchange="from(event)" value="" min="2021-03-01" max="2021-06-01" >
+                            <label for="exampleFormControlFile1">to</label>
+                            <input type="date" class="form-control"  id="todate" name="dateto" >
+                            <br>
+
+                            <button type="submit"  class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <!-- <table class="table no-wrap">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">Id</th>
+                                <th class="border-top-0">Name</th>
+                                <th class="border-top-0">Status</th>
+                                <th class="border-top-0">Date</th>
+                                <th class="border-top-0">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for orders in order %}
+                            <tr>
+                                <td>{{orders.id}}</td>
+                                <td class="txt-oflo">{{orders.user}}</td>
+                                <td>{{orders.status}}</td>
+                                <td class="txt-oflo">{{orders.date}}</td>
+                                <td><span class="text-success">{{orders.price}}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> -->
+                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">Id</th>
+                                <th class="border-top-0">Name</th>
+                                <th class="border-top-0">Status</th>
+                                <th class="border-top-0">Date</th>
+                                <th class="border-top-0">Price</th>  
+
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for orders in order %}
+                            <tr>
+                                <td>{{orders.id}}</td>
+                                <td class="txt-oflo">{{orders.user}}</td>
+                                <td>{{orders.status}}</td>
+                                <td class="txt-oflo">{{orders.date}}</td>
+                                <td><span class="text-success">{{orders.price}}</span></td> 
+                           
+                                
+                            </tr>
+                            {% endfor %}
+                          
+                            
+                            
+                            
+                           
+                        </tbody>
+
+
+                </table>       
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <script src= "https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                dom: 'Bfrtip',
+                buttons: [
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ],
+                drawCallback: function () {
+                    var hasRows = this.api().rows({ filter: 'applied' }).data().length > 0;
+                    $('.buttons-csv')[0].style.visibility = hasRows ? 'visible' : 'hidden'
+                    $('.buttons-excel')[0].style.visibility = hasRows ? 'visible' : 'hidden'
+                    $('.buttons-pdf')[0].style.visibility = hasRows ? 'visible' : 'hidden'
+                }
+            } );
+        } );
+        
+      
+        function from(event){
+            var start_date = event.target.value
+            document.getElementById("todate").min=start_date
+        }
+
+
+
+
+
+    </script>
+    {% endblock content %}

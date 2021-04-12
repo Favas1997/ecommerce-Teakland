@@ -1,0 +1,55 @@
+{% extends 'User/blank.html'%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	
+    <body>		
+		
+		<div id="wrapper" class="container">
+			{% block content %}			
+			<section class="header_text sub">
+				<h4><span>Paypal</span></h4>
+			</section>	
+			<div class="">
+				<h4 class="align-items-center">Order summary</h4>
+				<h5>Total amount to pay :{{grand_total}} </h5>
+			</div>
+			<div id="paypal-button-container"></div>
+
+    <!-- Include the PayPal JavaScript SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ASFd2_4hlJ9R2mSfxbxsC_AFMCWOP1VaC4oZe4wh5aZCMhxsBkEzpUBb451FodOMW1jVAUj3mmVfKQJL&currency=USD"></script>
+
+    <script>
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '{{grand_total}}'
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Show a success message to the buyer
+                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+					window.location.replace('/paypal_success/')
+					
+                });
+            }
+
+
+        }).render('#paypal-button-container');
+    </script>
+			
+			{% endblock content %}
+		</div>
+		<script src="themes/js/common.js"></script>
+    </body>
+</html>

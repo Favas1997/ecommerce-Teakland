@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Bootstrap E-commerce Templates</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>    
+		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
+		<!-- bootstrap -->
+		<link href="{%static 'User/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">      
+		<link href="{%static 'User/bootstrap/css/bootstrap-responsive.min.css' %}" rel="stylesheet">		
+		<link href="{%static 'User/themes/css/bootstrappage.css' %}" rel="stylesheet"/>
+		
+		<!-- global styles -->
+		<link href="{%static 'User/themes/css/flexslider.css' %}" rel="stylesheet"/>
+		<link href="{%static 'User/themes/css/main.css' %}" rel="stylesheet"/>
+
+		<!-- scripts -->
+		
+		<script src="{%static 'User/bootstrap/js/bootstrap.min.js' %}"></script>				
+		<script src="{%static 'User/themes/js/superfish.js'%}"></script>	
+		<script src="{% static 'User/themes/js/jquery.scrolltotop.js'%}"></script>
+		<!--[if lt IE 9]>			
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+    <body>	
+		<div id="wrapper" class="container">
+			<section class="main-content p-3">				
+				<div class="row">
+					 <div class="span5" >					
+						<h4 class="title"><span class="text"><strong>Login</strong> Form</span></h4>
+						<form action="" method="">
+							<input type="hidden" name="next" value="/">
+							<fieldset>
+								<div class="control-group">
+									<label class="control-label">Otp</label>
+									<div class="controls">
+										<input type="text" placeholder="Enter otp here" id="otp" class="input-xlarge">
+									</div>
+								</div>
+								
+								<div>
+									<span id="error"></span>
+								</div>
+								<div class="control-group">
+									<input tabindex="3" class="btn btn-inverse large" type="button" value="Login" id="otp1">
+                                    
+									
+									<!-- <p class="reset">Recover your <a tabindex="4" href="#" title="Recover your username or password">username or password</a></p> -->
+								</div>
+								 
+							</fieldset>
+						</form>				
+					</div>
+					
+				</div>
+			</section>
+			<div class="row feature_box">						
+				<div class="span4">
+					<div class="service">
+						<div class="responsive">	
+							<img src="{% static 'User/themes/images/feature_img_2.png' %}" alt="" />
+							<h4>MODERN <strong>DESIGN</strong></h4>
+							<p>Lorem Ipsum is simply dummy text of the printing and printing industry unknown printer.</p>									
+						</div>
+					</div>
+				</div>
+				<div class="span4">	
+					<div class="service">
+						<div class="customize">			
+							<img src="{% static 'User/themes/images/feature_img_1.png'%}" alt="" />
+							<h4>FREE <strong>SHIPPING</strong></h4>
+							<p>Lorem Ipsum is simply dummy text of the printing and printing industry unknown printer.</p>
+						</div>
+					</div>
+				</div>
+				<div class="span4">
+					<div class="service">
+						<div class="support">	
+							<img src="{% static 'User/themes/images/feature_img_3.png'%}" alt="" />
+							<h4>24/7 LIVE <strong>SUPPORT</strong></h4>
+							<p>Lorem Ipsum is simply dummy text of the printing and printing industry unknown printer.</p>
+						</div>
+					</div>
+				</div>	
+			</div>	
+			
+			<section id="footer-bar">
+				<div class="row">
+					<div class="span3">
+						<h4>Navigation</h4>
+						<ul class="nav">
+							<li><a href="./index.html">Homepage</a></li>  
+							<li><a href="./about.html">About Us</a></li>
+							<li><a href="./contact.html">Contac Us</a></li>
+							<li><a href="./cart.html">Your Cart</a></li>
+							<li><a href="./register.html">Login</a></li>							
+						</ul>					
+					</div>
+					<div class="span4">
+						<h4>My Account</h4>
+						<ul class="nav">
+							<li><a href="#">My Account</a></li>
+							<li><a href="#">Order History</a></li>
+							<li><a href="#">Wish List</a></li>
+							<li><a href="#">Newsletter</a></li>
+						</ul>
+					</div>
+					<div class="span5">
+						<p class="logo"><img src="themes/images/logo.png" class="site_logo" alt=""></p>
+						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. the  Lorem Ipsum has been the industry's standard dummy text ever since the you.</p>
+						<br/>
+						<span class="social_icons">
+							<a class="facebook" href="#">Facebook</a>
+							<a class="twitter" href="#">Twitter</a>
+							<a class="skype" href="#">Skype</a>
+							<a class="vimeo" href="#">Vimeo</a>
+						</span>
+					</div>					
+				</div>	
+			</section>
+			<section id="copyright">
+				<span>Copyright 2013 bootstrappage template  All right reserved.</span>
+			</section>
+		</div>
+		<script src="themes/js/common.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('#checkout').click(function (e) {
+					document.location.href = "checkout.html";
+				})
+			});
+		</script>
+		
+		<script>
+			$('#otp1').click(function(){
+
+				var otp=$('#otp').val()
+				console.log(otp)
+				
+				var data = {
+					'csrfmiddlewaretoken':'{{csrf_token}}',
+					'otp1':otp,
+					
+				}
+				 $.ajax({
+					 url:'/otp_validate/',
+					 method:'POST',
+					 data:data,
+					 dataType:'json',
+					 success:function(data){
+						 if (data=='true'){
+							window.location.replace('/')
+						 }
+						 
+					 }
+				 })
+			
+			})
+		 </script>
+		</div>	 		
+    </body>
+</html>

@@ -1,0 +1,171 @@
+{% extends 'User/blank.html'%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	
+    <body>		
+		
+		<div id="wrapper" class="container">
+			{% block content %}	
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>	
+			<section class="header_text sub">
+				<h4><span>edit here</span></h4>
+			</section>	
+			
+			<section class="main-content">
+				<div class="row">
+					<div class="span12">
+						<div class="accordion" id="accordion2">
+							<form>
+							
+								<div class="form-group">
+									<label for="inputAddress">Current password</label>
+									<input type="password" class="form-control"  placeholder="Current password" id="old_password" required>
+								  </div>
+								<div class="form-group">
+								  <label for="inputAddress">New password</label>
+								  <input type="password" class="form-control"  placeholder="New password" id="password1" required>
+								</div>
+								<div class="form-group">
+								  <label for="inputAddress2">Confirm password</label>
+								  <input type="password" class="form-control" placeholder="confirm password" id=password2 required>
+								</div>
+								<div>
+									<span id="error"></span>
+								</div>   
+								
+								<button type="button" id="btn"    class="btn btn-primary">Submit</button>
+							  </form>  
+						
+							
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Personal details</a>
+								</div>
+								<div id="collapseTwo" class="accordion-body collapse">
+									<div class="accordion-inner">
+										<div class="row-fluid" >
+											
+												<form>
+													
+													<div class="form-group">
+														<label for="inputAddress">Username</label>
+														<input type="text" class="form-control" name="names"  id="username" value="{{user.username}}" placeholder="Name" required>
+													  </div>
+													<div class="form-group">
+													  <label for="inputAddress">Email</label>
+													  <input type="text" class="form-control" name="address"  id="email" value="{{user.email}}" placeholder="Address" required>
+													</div>
+													
+													
+													
+													<button type="button"  id="btn1"  class="btn btn-primary">Submit</button>
+												  </form>  
+											
+											
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>				
+					</div>
+				</div>
+			</section>	
+			
+			<script>
+				$('#btn').click(function(){
+					var password1= $('#password1').val()
+					var password2= $('#password2').val()
+					var old_password = $('#old_password').val()
+					var password_length = $('#password1').val().length
+			
+					var data = {
+						'csrfmiddlewaretoken':'{{csrf_token}}',
+						'password1':password1,
+						'passwordss':old_password
+					}
+			
+				if (password_length<5){
+					$('#error').html('password contain 5 character')
+				}
+				else if(password1!=password2){
+					$('#error').html('password does not match')
+				}
+				else{
+					
+					$.ajax({
+						url :'/edit_profile/',
+						method :'POST',
+						data : data,
+						dataType : 'json',
+						success:function(data){
+							if(data=='true'){
+								window.location.replace('/')
+							}
+							
+							
+						}
+			
+					})
+				}
+				}) 
+
+			</script>
+			<script>
+				$('#btn1').click(function(){
+					var username= $('#username').val()
+					var email= $('#email').val()
+					var username_length = $('#username').val().length
+			        var at = email.indexOf('@')
+				    var dot =email.indexOf('.')
+					var data = {
+						'csrfmiddlewaretoken':'{{csrf_token}}',
+						'username':username,
+						'email':email
+					}
+			    
+				if (email===''){
+					$('#error1').html('enter email')   
+				}
+				else if (username===''){
+					$('#error1').html('enter a username')
+				}
+				else if (username_length<3 ||username_length>15){
+					$('#error1').html('username contain atleast 3 char')
+				}
+				else if (at<2 || dot<at+2|| dot+2>=email.length) {
+					$('#error1').html('enter valid format') 
+				}
+				
+				else{
+					console.log('gvgvghghjbhjbjbj')
+					$.ajax({
+						url :'/edit_details/',
+						method :'POST',
+						data : data,
+						dataType : 'json',
+						success:function(data){
+							if(data=='true'){
+								window.location.replace('/my_account/')
+							}
+							else if(data =='false'){
+								$('#error1').html('already exist user name')
+							}
+							else if(data =='false1'){
+								$('#error1').html('already exist email')
+							}
+							
+						}
+			
+					})
+				}
+				}) 
+			</script>
+			
+			
+			{% endblock content %}
+		</div>
+		<script src="themes/js/common.js"></script>
+    </body>
+</html>

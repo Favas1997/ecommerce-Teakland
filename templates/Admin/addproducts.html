@@ -1,0 +1,386 @@
+{% extends "Admin/blank.html" %}
+{% load static %}
+<div class="page-wrapper">
+    {% block content %}
+    <link href="{% static 'Admin/user.css'%}" rel="stylesheet">
+    <!-- croperjs -->
+    
+    
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb bg-white">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">Add product</h4>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+
+    <div class="container-fluid bg-dark ">
+        <!-- ============================================================== -->
+        <!-- Three charts -->
+        <!-- ============================================================== -->
+        <form>
+          
+          <div class="form-group col-md-12 p-4 ">
+            <div class="col-md-6" style="float: left;">
+              <input type="text" class="form-control" placeholder="Product name" id="product_name" name="product_name" >
+            </div>
+            <div class="col-md-6" style="float: left;">
+              <input type="text" class="form-control" placeholder="Price" id="price" name="price"  >
+            </div>
+          </div>
+          <div class="form-group col-md-12 p-4">
+            <div class="col-md-6" style="float: left;">
+              <input type="text" class="form-control" placeholder="Material" id="material" name="material" >
+            </div>
+            <div class="col-md-6" style="float: left;">
+              <input type="text" class="form-control" placeholder="Diamension" id="diamension" name="diamension" >
+            </div>
+          </div>
+          <div class="form-group col-md-12 p-4">
+            <div class="col-md-6" style="float: left;">
+              <input type="text" class="form-control" placeholder="Caring Instructions" id="caring_instructions" name="caring_instructions" >
+            </div>
+            <div class="col-md-6" style="float: left;">
+              <input type="text" class="form-control" placeholder="Description" id="description" name="description" >
+            </div>
+          </div>
+          <div class="form-group col-md-12 p-4">
+            <div class="col-md-6" style="float: left;">
+               <select class="form-control" id="category" name="category"  >
+                 {% for category in category %}
+                <option>{{category.category}}</option>
+                {% endfor %}
+               </select>
+            </div>
+            <div class="col-md-6" style="float: left;">
+              <input type="text" class="form-control" placeholder="Finish" id="finish" name="finish" >
+            </div>
+          </div>
+         
+          <div class="form-group col-md-12 p-4">
+              <!-- <label for="exampleFormControlFile1">Image 1</label>
+              <img src="" name="image1" id="viewimage1" style="width: 100px; height: auto;">
+              <input type="file" class="form-control-file" id="image1" name="image1" onchange="viewimg1(event)" required>
+              <label for="exampleFormControlFile1">Image 2</label>
+              <img src="" name="image2" id="viewimage2" style="width: 100px; height: auto;">
+              <input type="file" class="form-control-file" id="image2" name="image2" onchange="viewimg2(event)" required>
+              <label for="exampleFormControlFile1">Image 3</label>
+              <img src="" name="image3" id="viewimage3" style="width: 100px; height: auto;">
+              <input type="file" class="form-control-file" id="image3" name="image3" onchange="viewimg3(event)"  required> -->
+              <label for="exampleFormControlFile1">Image 1</label>
+              <img id="cropped" class="cropped" src=""onclick="openImage()"  
+                                    style="height: 10rem; width: 10rem;">
+              <input type="file" name="image1" id="image1" oninput= "cropped.src=window.URL.createObjectURL(this.files[0])" accept="image/*">
+              <label for="exampleFormControlFile1">Image 2</label>
+              <img id="cropped2 " class="cropped2" src=""onclick="openImage1()" 
+                                    style="height: 10rem; width: 10rem;">
+              <input type="file" name="image2" id="image2" oninput= "cropped2.src=window.URL.createObjectURL(this.files[0])" accept="image/*">
+              <label for="exampleFormControlFile1">Image 3</label>
+              <img id="cropped3 " class="cropped3" src=""onclick="openImage2()" 
+                                    style="height: 10rem; width: 10rem;">
+              <input type="file" name="image3" id="image3" oninput= "cropped3.src=window.URL.createObjectURL(this.files[0])" accept="image/*">
+          </div>
+          <span id="message"> </span>
+          
+          
+            <button type="button" id="submit_button" class="btn btn-primary">Submit</button>
+          </form>
+          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                    <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="box-2">
+                        <div class="result"></div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button"  class="btn btn-secondary" data-dismiss="modal">
+                        Close
+                    </button>
+
+                    <button type="button" id="load" class="btn save btn-primary">
+                        Save changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+    <script>
+      var imgSrc;
+      let result = document.querySelector(".result"),
+          save = document.querySelector(".save"),
+          cropped = document.querySelector(".cropped"),
+          upload = document.querySelector("#image1"),
+          cropper = "";
+
+      upload.addEventListener("change", (e) => {
+          if (e.target.files.length) {
+              // start file reader
+              const reader = new FileReader();
+
+              reader.onload = (e) => {
+                  if (e.target.result) {
+                      // create new image
+                      $("#exampleModalCenter").modal("show");
+                      let img = document.createElement("img");
+                      img.id = "image";
+                      img.src = e.target.result;
+
+                      // clean result before
+                      result.innerHTML = "";
+                      // append new image
+
+                      result.appendChild(img);
+                      // init cropper
+                      cropper = new Cropper(img, {
+                          viewMode: 2,
+                          aspectRatio: 5 / 5,
+                          autoCropArea: 1,
+                      
+                          crop: function (e) {
+                              console.log(e.detail.x);
+                              console.log(e.detail.y);
+                          }
+
+                      });
+
+                  }
+              };
+              reader.readAsDataURL(e.target.files[0]);
+          }
+      });
+
+      save.addEventListener("click", (e) => {
+          e.preventDefault();
+          // get result to data uri
+          imgSrc = cropper
+              .getCroppedCanvas({
+                  width: 500, // img disp value
+              })
+              .toDataURL();
+          $("#exampleModalCenter").modal("hide");
+          cropped.src = imgSrc;
+
+      });
+
+       function openImage() {
+            $('#image1').click()
+        }
+        
+  </script>
+  <script>
+    var imgSrc2;
+    let result2 = document.querySelector(".result"),
+        save2 = document.querySelector(".save"),
+        cropped2 = document.querySelector(".cropped2"),
+        upload2 = document.querySelector("#image2"),
+        cropper2 = "";
+
+    upload2.addEventListener("change", (e) => {
+        if (e.target.files.length) {
+            // start file reader
+            const reader2 = new FileReader();
+
+            reader2.onload = (e) => {
+                if (e.target.result) {
+                    // create new image
+                    $("#exampleModalCenter").modal("show");
+                    let img2 = document.createElement("img");
+                    img2.id = "image";
+                    img2.src = e.target.result;
+
+                    // clean result before
+                    result2.innerHTML = "";
+                    // append new image
+
+                    result2.appendChild(img2);
+                    // init cropper
+                    cropper2 = new Cropper(img2, {
+                        viewMode: 2,
+                        aspectRatio: 5 / 5,
+                        autoCropArea: 1,
+                      
+                        crop: function (e) {
+                            console.log(e.detail.x);
+                            console.log(e.detail.y);
+                        }
+
+                    });
+
+                }
+            };
+            reader2.readAsDataURL(e.target.files[0]);
+        }
+    });
+
+    save2.addEventListener("click", (e) => {
+        e.preventDefault();
+        // get result to data uri
+        imgSrc2 = cropper2.getCroppedCanvas({
+                width: 300, // img disp value
+            })
+            .toDataURL();
+        $("#exampleModalCenter").modal("hide");
+        cropped2.src = imgSrc2;
+
+    });
+
+     function openImage1() {
+          $('#image2').click()
+      }
+      
+</script>
+<script>
+  var imgSrc3;
+  let result3 = document.querySelector(".result"),
+      save3= document.querySelector(".save"),
+      cropped3 = document.querySelector(".cropped3"),
+      upload3 = document.querySelector("#image3"),
+      cropper3 = "";
+
+  upload3.addEventListener("change", (e) => {
+      if (e.target.files.length) {
+          // start file reader
+          const reader3 = new FileReader();
+
+          reader3.onload = (e) => {
+              if (e.target.result) {
+                  // create new image
+                  $("#exampleModalCenter").modal("show");
+                  let img3 = document.createElement("img");
+                  img3.id = "image";
+                  img3.src = e.target.result;
+
+                  // clean result before
+                  result3.innerHTML = "";
+                  // append new image
+
+                  result3.appendChild(img3);
+                  // init cropper
+                  cropper3 = new Cropper(img3, {
+                      viewMode: 2,
+                      aspectRatio: 5 / 5,
+                      autoCropArea: 1,
+                      cropBoxResizable:false,
+                      crop: function (e) {  
+                          console.log(e.detail.x);
+                          console.log(e.detail.y);
+                      }
+
+                  });
+
+              }
+          };
+          reader3.readAsDataURL(e.target.files[0]);
+      }
+  });
+
+  save3.addEventListener("click", (e) => {
+      e.preventDefault();
+      // get result to data uri
+      imgSrc3 = cropper3.getCroppedCanvas({
+              width: 300, // img disp value
+          })
+          .toDataURL();
+      $("#exampleModalCenter").modal("hide");
+      cropped3.src = imgSrc3;
+
+  });
+
+   function openImage2() {
+        $('#image3').click()
+    }
+    
+</script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+$('#submit_button').click(function () {
+  console.log('qqqqqq')
+  var formData = new FormData();
+  formData.append("product_name", document.getElementById("product_name").value);
+  formData.append("price", document.getElementById("price").value);
+  formData.append("image2", imgSrc2);
+  formData.append("image1", imgSrc);
+  formData.append("image3", imgSrc3);
+  formData.append("material", document.getElementById("material").value);
+  formData.append("finish", document.getElementById("finish").value);
+  formData.append("diamension", document.getElementById("diamension").value);
+  formData.append("caring_instructions", document.getElementById("caring_instructions").value);
+  formData.append("description", document.getElementById("description").value);
+  formData.append("category", document.getElementById("category").value);
+  formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+
+  // restrict other Filetypes
+  var ext = image1.value.split(".")
+  ext = ext[ext.length - 1].toLowerCase();
+  var arrayExtensions = ["jpg", "png", "svg", "jpeg"];
+  // END RESTRRICT FILE TYPE
+
+  if (image1.value == '') {
+      $('#message').html('Upload Thumbnail')
+  }
+  else {
+    console.log('1sabxabxbbhjx')
+      $.ajax({
+          url: '/admin/addproducts/',
+          type: 'POST',
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,   
+          dataType: 'JSON',
+          success: function (data) {
+              if (data=='true') {
+                window.location.replace('/admin/viewproducts/')
+              }
+          }
+      })
+
+  }
+})
+
+</script>
+
+
+
+
+    <script src="{% static 'Admin/plugins/bower_components/jquery/dist/jquery.min.js'%}"></script>
+    <!-- <script>
+      function viewimg1(event){
+        document.getElementById('viewimage1').src=URL.createObjectURL(event.target.files[0])
+      }
+      function viewimg2(event){
+        document.getElementById('viewimage2').src=URL.createObjectURL(event.target.files[0])
+      }
+      function viewimg3(event){
+        document.getElementById('viewimage3').src=URL.createObjectURL(event.target.files[0])
+      }
+    </script> -->
+    {% endblock content %}

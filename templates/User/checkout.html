@@ -1,0 +1,199 @@
+{% extends 'User/blank.html'%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	
+    <body>		
+		
+		<div id="wrapper" class="container">
+			{% block content %}			
+			<section class="header_text sub">
+				<h4><span>Check Out</span></h4>
+			</section>	
+			<div class="">
+				<h4 class="align-items-center">Order summary</h4>
+				<h5>Total amount to pay :{{grand_total}} </h5>
+			</div>
+			<section class="main-content">
+				<div class="row">
+					<div class="span12">
+						<div class="accordion" id="accordion2">
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Select address</a>
+								</div>
+								<div id="collapseOne" class="accordion-body in collapse">
+									<div class="accordion-inner">
+										<div class="row-fluid">
+											{%for address in address%}
+											<div class="span6">
+
+												<div class="form-check">
+													<input class="form-check-input " name="gygygy" type="radio" onclick="add('{{address.id}}')" id="{{address.id}}">
+													
+												
+												
+
+                                                   <p>
+													   {{address.name}}
+													   {{address.Mobile}}<br>
+													   {{address.address}}<br>
+													   {{address.city}}<br>
+													   {{address.district}}<br>
+													   {{address.state}}<br>
+													   {{address.pincode}}<br>
+												
+
+												   </p>
+                                                  <div>
+													<a  href="{% url 'delete_address' address.id %}" class="btn btn-danger " >Delete</a>
+													<a  href="" class="btn btn-primary " >edit</a>
+
+												  </div>
+                                                </div>
+												
+												
+											</div>
+											{% endfor %}
+											
+											 
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Add newaddress</a>
+								</div>
+								<div id="collapseTwo" class="accordion-body collapse">
+									<div class="accordion-inner">
+										<div class="row-fluid" >
+											
+												<form  method="POST" action="/add_address/">
+													{%csrf_token%}
+													<div class="form-group">
+														<label for="inputAddress">Name</label>
+														<input type="text" class="form-control" name="names" placeholder="Name" required>
+													  </div>
+													<div class="form-group">
+													  <label for="inputAddress">Address</label>
+													  <input type="text" class="form-control" name="address" placeholder="Address" required>
+													</div>
+													<div class="form-group">
+													  <label for="inputAddress2">Mobile Number</label>
+													  <input type="text" class="form-control" name="mobile_number" placeholder="Mobile number" required>
+													</div>
+													<div class="form-row" >
+													  <div class="form-group col-md-6">
+														<label for="inputCity">City</label>
+														<input type="text" class="form-control" name="city" required>
+													  </div>
+													  <div class="form-group col-md-6">
+														<label for="inputCity">District</label>
+														<input type="text" class="form-control" name="district" required>
+													  </div>
+													  <div class="form-group col-md-4">
+														<label for="inputState">State</label>
+														<select name="state" class="form-control" required>
+														  <option selected>Choose...</option>
+														  <option>Kochi</option>
+														  <option>Kozhikode</option>
+														  <option>kottayam</option>
+														  <option>palakkad</option>
+														  <option>Malappuram</option>
+														  <option>thiruvanathapuram</option>
+														</select>
+													  </div>
+													  <div class="form-group col-md-2">
+														<label for="inputZip">Pincode</label>
+														<input type="text" class="form-control" name="pincode" required>
+													  </div>
+													</div>
+													
+													<button type="submit" class="btn btn-primary">Submit</button>
+												  </form>  
+											
+											
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree"> Select Payment Mode</a>
+								</div>
+								<div id="collapseThree" class="accordion-body collapse">
+									<div class="accordion-inner">
+											<label class="radio" for="register">
+												<input type="radio" name="payment" value="cod" id="cod" checked="checked">COD
+											</label>
+											<label class="radio" for="register">
+												<input type="radio" name="payment" value="razorpay" id="razorpay" checked="checked">Razorpay
+											</label>
+											<label class="radio" for="register">
+												<input type="radio" name="payment" value="paypal" id="paypal" checked="checked">Paypal
+											</label>
+
+											<div class="">
+												
+												
+											</div>
+
+											<button class="btn btn-inverse pull-right" onclick="addselect()">Confirm order</button>
+									</div>
+									
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>
+			</section>	
+			
+			<script>
+				function add(id){
+					$.ajax({
+						url: '/select_address/'+id,
+						method: 'POST',
+
+						success:function(data){
+							
+							if(data=='true'){
+								alert('added')
+							}
+						}
+
+					})
+				}
+
+				function addselect(){
+					var value = $("input[type='radio'][name='payment']:checked").val();
+					var data = {
+						'value':value
+					}
+					$.ajax({
+						url:'/payment_method/',
+						method: 'GET',
+						data :data,
+						datatype :'json',
+						success:function(data){
+							if(data=='COD'){
+								window.location.replace('/cod/')
+							}
+							else if(data=='PAYPAL'){
+                               window.location.replace('/paypal/')
+							}
+							else if(data=='RAZORPAY'){
+								window.location.replace('/razorpay/')
+							}
+						}
+					})
+					
+				}
+			</script>
+			
+			
+			{% endblock content %}
+		</div>
+		<script src="themes/js/common.js"></script>
+    </body>
+</html>
