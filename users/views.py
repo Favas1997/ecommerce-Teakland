@@ -74,7 +74,6 @@ def register(request):
                   user= User.objects.create_user(username=username,password=password1,email=email,first_name=firstname,last_name=lastname)
                   myuser.objects.create(user=user,mobile_number=mobile_number)
                   welcome_coupon=random.randint(100000,999999)
-                  print(welcome_coupon)
                   my=myuser.objects.get(mobile_number=mobile_number)
                   my.coupon_code=welcome_coupon
                   my.save()
@@ -351,9 +350,7 @@ def my_account(request):
                 refer=Referal.objects.filter(user=request.user)
           else:
                refer= str(0)
-          print(refer)
           coupon_get=coupon.objects.all()
-          print(my.image1)
           
           return render(request,'User/profile.html',{'address':address1,'orders':order,'profile':my,'coupon_get':coupon_get,'host':host,'refer':refer}) 
      else:
@@ -362,7 +359,6 @@ def edit_profile(request):
      if request.user.is_authenticated:
 
           if request.method =='POST':
-               print('favas')
                current_entered=request.POST['passwordss']    
                current_password=request.user.password
                new_password1=request.POST['password1']
@@ -381,7 +377,6 @@ def edit_details(request):
      if request.user.is_authenticated:
 
           if request.method =='POST':
-               print('favas')
                user=request.user
                id=request.user.id
                username=request.POST['username']    
@@ -447,7 +442,6 @@ def search(request):
      if request.user.is_authenticated:
           if request.method=='POST':
                search_product=request.POST['products']
-               print(search_product)
                cache.set('search_Product',search_product)
                product=products.objects.filter(product_name__icontains=search_product)
                cache.set('products',product)
@@ -498,8 +492,6 @@ def referal_code(request,id):
                user= User.objects.create_user(username=username,password=password1,email=email,first_name=firstname,last_name=lastname)
                myuser.objects.create(user=user,mobile_number=mobile_number)
                coupon_refer=random.randint(100000,999999)
-               print(coupon_refer)
-               print(referal_code)
                Referal.objects.create(user=users,referal_code='REFERAL '+str(coupon_refer),coupon_percentage='10')
                refer_get=random.randint(100000,999999)
                Referal.objects.create(user=user,referal_code='REFERAL '+str(refer_get),coupon_percentage='10')

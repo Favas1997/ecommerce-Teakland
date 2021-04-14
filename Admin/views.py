@@ -142,9 +142,12 @@ def addproducts(request):
                     if products.objects.filter(product_name=product_name).exists():
                          messages.info(request,'already exist')
                     else:
-                         category=product_category.objects.get(category=category)
-                         product=products.objects.create(product_name=product_name,description=description,image1=img1,image2=img2,image3=img3,price=price,material=material,CaringInstructions=caring_instructions,finish=finish,category=category,Diamensions=diamension)
-                         product.save()
+                         try:
+                              category=product_category.objects.get(category=category)
+                              product=products.objects.create(product_name=product_name,description=description,image1=img1,image2=img2,image3=img3,price=price,material=material,CaringInstructions=caring_instructions,finish=finish,category=category,Diamensions=diamension)
+                         except:
+                              category = None
+                        
                          return JsonResponse('true', safe=False)
                else:
                     category=product_category.objects.all()
@@ -167,9 +170,7 @@ def product_edit(request,id):
                category=product_category.objects.all()
                passing={'product':product,'category':category}
                if request.method=='POST':
-                    print('1112233333')
                     product_name=request.POST['product_name']
-                    print(product_name)
                     price=request.POST['price']
                     material=request.POST['material']
                     diamension=request.POST['diamension']
@@ -193,7 +194,6 @@ def product_edit(request,id):
                          messages.info(request,'already exist')
                     else:
                          category=product_category.objects.get(category=category)
-                         print(id)
                          product.product_name=product_name
                          product.description=description
                          product.image1=img1
